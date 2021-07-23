@@ -66,5 +66,7 @@ namespace Sharp.Image
             => new Picture(bmp);
         public static implicit operator Picture(ByteProcessingPicture pp)
             => pp.Close();
+        public static implicit operator Picture(FloatProcessingPicture pp)
+            => pp.Close();
     }
 }

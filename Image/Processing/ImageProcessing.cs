@@ -62,9 +62,9 @@ namespace Sharp.Image.Processing
                     {
                         int index = j * pp.stride + i;
                         var rgb = operation(pixel[2], pixel[1], pixel[0]);
-                        pp.data[i] = rgb.Item1 / 255f;
-                        pp.data[i + 1] = rgb.Item2 / 255f;
-                        pp.data[i + 2] = rgb.Item3 / 255f;
+                        pp.data[index] = rgb.Item1;
+                        pp.data[index + 1] = rgb.Item2;
+                        pp.data[index + 2] = rgb.Item3;
                     }
                 });
             }
@@ -79,10 +79,11 @@ namespace Sharp.Image.Processing
                 int width = pp.width * 3;
                 for (int i = 0; i < width; i += 3)
                 {
-                    var rgb = operation(pp.data[i], pp.data[i + 1], pp.data[i + 2]);
-                    pp.data[i] = rgb.Item1;
-                    pp.data[i + 1] = rgb.Item2;
-                    pp.data[i + 2] = rgb.Item3;
+                    int index = i + j * pp.stride;
+                    var rgb = operation(pp.data[index], pp.data[index + 1], pp.data[index + 2]);
+                    pp.data[index] = rgb.Item1;
+                    pp.data[index + 1] = rgb.Item2;
+                    pp.data[index + 2] = rgb.Item3;
                 }
             });
             return pp;
