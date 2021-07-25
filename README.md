@@ -3,6 +3,8 @@ Uma biblioteca de processamento digital de imagens para C# em construção.
 
 ## Features
 
+A seguir as features demonstradas sobre essa imagem de exemplo:
+![paingaming.jpg](imgs/paingaming.jpg)
 
 ### Processamento Pixel-a-Pixel
 
@@ -14,10 +16,21 @@ Picture pic = Picture
     .New("paingaming.jpg")
     .ForPixel((r, g, b) => r > 200 ? (r, g, b) : (255, 255, 255));
 
-pic.Save("redtreshhold.jpg");
+pic.Save("redtreshold.jpg");
 ```
-![paingaming.jpg](imgs/paingaming.jpg)
-![redtreshhold.jpg](imgs/redtreshhold.jpg)
+![redtreshold.jpg](imgs/redtreshold.jpg)
+
+```
+using Sharp.Image;
+using Sharp.Image.Processing;
+
+Picture pic = Picture
+    .New("paingaming.jpg")
+    .ForPixel(p => p > 155 ? 255 : 0); //Grayscale automático
+
+pic.Save("gstreshold.jpg");
+```
+![gstreshold.jpg](imgs/gstreshold.jpg)
 
 ## TODO
 
