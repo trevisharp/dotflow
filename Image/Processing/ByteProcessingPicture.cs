@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 
 namespace Sharp.Image.Processing
 {
-    public unsafe class ByteProcessingPicture : IDisposable
+    public unsafe class ByteProcessingPicture : IProcessingPicture, IDisposable
     {
         internal ByteProcessingPicture() { }
         internal Bitmap bmp = null;
@@ -74,6 +74,11 @@ namespace Sharp.Image.Processing
             this.bmpdata = null;
             this.stride = -1;
             this.p = null;
+        }
+
+        public IntegralImage BuildIntegralImage()
+        {
+            throw new NotImplementedException();
         }
     }
 }

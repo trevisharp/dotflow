@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sharp.Image.Processing
 {
-    public unsafe class ByteGrayscaleProcessingPicture : IDisposable
+    public unsafe class ByteGrayscaleProcessingPicture : IProcessingPicture, IDisposable
     {
         internal ByteGrayscaleProcessingPicture() { }
         internal Bitmap bmp = null;
@@ -69,6 +69,11 @@ namespace Sharp.Image.Processing
             this.stride = -1;
             this.bmpdata = null;
             this.picture = null;
+        }
+    
+        public IntegralImage BuildIntegralImage()
+        {
+            throw new NotImplementedException();
         }
     }
 }

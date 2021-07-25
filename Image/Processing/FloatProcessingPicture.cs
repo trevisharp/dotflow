@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sharp.Image.Processing
 {
-    public unsafe class FloatProcessingPicture : IDisposable
+    public unsafe class FloatProcessingPicture : IProcessingPicture, IDisposable
     {
         internal FloatProcessingPicture() { }
         internal Bitmap bmp = null;
@@ -91,6 +91,11 @@ namespace Sharp.Image.Processing
             this.bmpdata = null;
             this.stride = -1;
             this.p = null;
+        }
+    
+        public IntegralImage BuildIntegralImage()
+        {
+            throw new NotImplementedException();
         }
     }
 }
