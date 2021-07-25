@@ -35,6 +35,10 @@ namespace Sharp.Image
             return pic;
         }
 
+        public void Save(string path)
+        {
+            bmp.Save(path);
+        }
         public void Show()
         {
             if (mainpic != null)
