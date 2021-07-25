@@ -26,7 +26,7 @@ namespace Sharp.Image.Processing
             return pp;
         }
 
-        public static ByteProcessingPicture ForPixel(this ByteProcessingPicture pp, Func<byte, byte, byte, (byte, byte, byte)> operation)
+        public static ByteProcessingPicture ForPixel(this ByteProcessingPicture pp, Func<byte, byte, byte, (int, int, int)> operation)
         {
             unsafe
             {
@@ -113,7 +113,7 @@ namespace Sharp.Image.Processing
             return fpp;
         }
 
-        public static ByteProcessingPicture ForPixel(this FloatProcessingPicture pp, Func<float, float, float, (byte, byte, byte)> operation)
+        public static ByteProcessingPicture ForPixel(this FloatProcessingPicture pp, Func<float, float, float, (int, int, int)> operation)
         {
             var bpp = pp.ToByteProcessing();
 
