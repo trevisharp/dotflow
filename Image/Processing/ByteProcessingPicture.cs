@@ -1,11 +1,13 @@
+using System;
+using System.Buffers;
 using System.Drawing;
 using System.Drawing.Imaging;
 
 namespace Sharp.Image.Processing
 {
-    public unsafe class ByteProcessingPicture
+    public unsafe class ByteProcessingPicture : IDisposable
     {
-        private ByteProcessingPicture() { }
+        internal ByteProcessingPicture() { }
         internal Bitmap bmp = null;
         internal byte* p = null;
         internal int width = -1;
@@ -15,7 +17,7 @@ namespace Sharp.Image.Processing
         internal Picture picture = null;
         internal bool closed = false;
 
-        public static ByteProcessingPicture FromPicture(Picture picture)
+        internal static ByteProcessingPicture FromPicture(Picture picture)
         {
             if (picture == null)
                 return null;
@@ -39,8 +41,32 @@ namespace Sharp.Image.Processing
                 return null;
             closed = true;
             var pic = this.picture;
-            this.bmp.UnlockBits(this.bmpdata);
+            Dispose();
 
+            return pic;
+        }
+    
+        internal FloatProcessingPicture ToFloatProcessing()
+        {
+            this.closed = true;
+            
+            var fpp = new FloatProcessingPicture();
+            fpp.bmp = this.bmp;
+            fpp.bmpdata = this.bmpdata;
+            fpp.picture = this.picture;
+            fpp.stride = this.stride;
+            fpp.width = this.width;
+            fpp.height = this.height;
+            fpp.p = this.p;
+
+            fpp.data = ArrayPool<float>.Shared.Rent(3 * fpp.stride * fpp.height);
+
+            return fpp;
+        }
+
+        public void Dispose()
+        {
+            this.bmp.UnlockBits(this.bmpdata);
             this.picture = null;
             this.bmp = null;
             this.width = -1;
@@ -48,8 +74,6 @@ namespace Sharp.Image.Processing
             this.bmpdata = null;
             this.stride = -1;
             this.p = null;
-
-            return pic;
         }
     }
 }

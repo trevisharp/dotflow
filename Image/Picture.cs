@@ -1,10 +1,11 @@
+using System;
 using System.Drawing;
 
 namespace Sharp.Image
 {
     using Util;
     using Processing;
-    public class Picture
+    public class Picture : IDisposable
     {
         internal Rectangle rect;
         internal Bitmap bmp = null;
@@ -51,6 +52,13 @@ namespace Sharp.Image
                     .SetPicture(this)
                     .Show();
             }
+        }
+
+        public void Dispose()
+        {
+            if (mainpic is null)
+                bmp.Dispose();
+            else mainpic.Dispose();
         }
 
         public static Picture New(string path)
