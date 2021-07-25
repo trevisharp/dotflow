@@ -14,11 +14,11 @@ using Sharp.Image.Processing;
 
 Picture pic = Picture
     .New("paingaming.jpg")
-    .ForPixel((r, g, b) => r > 200 ? (r, g, b) : (255, 255, 255));
+    .ForPixel((r, g, b) => (255 - r, 255 - g, 255 - b));
 
-pic.Save("redtreshold.jpg");
+pic.Save("negativepng.jpg");
 ```
-![redtreshold.jpg](imgs/redtreshold.jpg)
+![negativepng.jpg](imgs/negativepng.jpg)
 
 ```
 using Sharp.Image;
@@ -31,6 +31,19 @@ Picture pic = Picture
 pic.Save("gstreshold.jpg");
 ```
 ![gstreshold.jpg](imgs/gstreshold.jpg)
+
+```
+using Sharp.Image;
+using Sharp.Image.Processing;
+
+Picture pic = Picture
+    .New("paingaming.jpg")
+    .ForPixel((r, g, b) => (r * g / 255, g * b / 255, b * r / 255)) //Multiplos processamentos
+    .ForPixel((r, g, b) => (b, g, r));
+
+pic.Save("multiprocesspng.jpg");
+```
+![multiprocesspng.jpg](imgs/multiprocesspng.jpg)
 
 ## TODO
 

@@ -26,7 +26,7 @@ namespace Sharp.Image.Processing
             return pp;
         }
 
-        public static ByteProcessingPicture ForPixel(this ByteProcessingPicture pp, Func<byte, byte, byte, (int, int, int)> operation)
+        public static ByteProcessingPicture ForPixel(this ByteProcessingPicture pp, Func<byte, byte, byte, (byte, byte, byte)> operation)
         {
             unsafe
             {
