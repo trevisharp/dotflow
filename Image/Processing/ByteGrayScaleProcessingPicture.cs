@@ -1,12 +1,13 @@
 using System;
+using System.Buffers;
 using System.Drawing;
 using System.Drawing.Imaging;
 
 namespace Sharp.Image.Processing
 {
-    public unsafe class ByteGrayScaleProcessingPicture : IDisposable
+    public unsafe class ByteGrayscaleProcessingPicture : IDisposable
     {
-        internal ByteGrayScaleProcessingPicture() { }
+        internal ByteGrayscaleProcessingPicture() { }
         internal Bitmap bmp = null;
         internal byte* p = null;
         internal int width = -1;
@@ -14,11 +15,39 @@ namespace Sharp.Image.Processing
         internal int stride = -1;
         internal BitmapData bmpdata = null;
         internal Picture picture = null;
-        internal float[] data;
+        internal byte[] data;
         internal bool closed = false;
+
+        internal static ByteGrayscaleProcessingPicture FromPicture(Picture picture)
+        {
+            if (picture == null)
+                return null;
+            
+            ByteGrayscaleProcessingPicture pp = new ByteGrayscaleProcessingPicture();
+
+            pp.picture = picture;
+            pp.bmp = picture.bmp;
+            pp.width = picture.rect.Width;
+            pp.height = picture.rect.Height;
+            pp.bmpdata = pp.bmp.LockBits(picture.rect, ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+            pp.stride = pp.bmpdata.Stride;
+            pp.p = (byte*)pp.bmpdata.Scan0.ToPointer();
+            pp.data = ArrayPool<byte>.Shared.Rent(pp.stride * pp.height);
+
+            return pp;
+        }
+
         public void Dispose()
         {
-            throw new NotImplementedException();
+            ArrayPool<byte>.Shared.Return(data);
+            this.data = null;
+            this.bmp = null;
+            this.p = null;
+            this.width = -1;
+            this.height = -1;
+            this.stride = -1;
+            this.bmpdata = null;
+            this.picture = null;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Sharp.Image.Processing
         internal Picture picture = null;
         internal float[] data;
         internal bool closed = false;
-
+        
         internal static FloatProcessingPicture FromPicture(Picture picture)
         {
             if (picture == null)
@@ -63,7 +63,6 @@ namespace Sharp.Image.Processing
             Dispose();
             return pic;
         }
-
         internal ByteProcessingPicture ToByteProcessing()
         {
             this.closed = true;
@@ -83,6 +82,7 @@ namespace Sharp.Image.Processing
         public void Dispose()
         {
             ArrayPool<float>.Shared.Return(this.data);
+            this.data = null;
             this.bmp.UnlockBits(this.bmpdata);
             this.picture = null;
             this.bmp = null;

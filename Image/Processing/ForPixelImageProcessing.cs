@@ -139,6 +139,40 @@ namespace Sharp.Image.Processing
             return bpp;
         }
     
-        
+        public static ByteGrayscaleProcessingPicture ForPixel(this Picture picture, Func<byte, byte, byte, byte> operation)
+        {
+            var pp = ByteGrayscaleProcessingPicture.FromPicture(picture);
+
+            unsafe
+            {
+                Parallel.For(0, pp.height, j =>
+                {
+                    byte* pixel = pp.p + j * pp.stride;
+                    int width = pp.width;
+                    for (int i = 0; i < width; i++, pixel += 3)
+                        pp.data[i] = operation(pixel[2], pixel[1], pixel[0]);
+                });
+            }
+
+            return pp;
+        }
+
+        public static ByteGrayscaleProcessingPicture ToGrayscale(this Picture picture)
+        {
+            var pp = ByteGrayscaleProcessingPicture.FromPicture(picture);
+
+            unsafe
+            {
+                Parallel.For(0, pp.height, j =>
+                {
+                    byte* pixel = pp.p + j * pp.stride;
+                    int width = pp.width;
+                    for (int i = 0; i < width; i++, pixel += 3)
+                        pp.data[i] = (byte)((299 * pixel[2] + 587 * pixel[1] + 114 * pixel[0]) / 1000);
+                });
+            }
+
+            return pp;
+        }
     }
 }
