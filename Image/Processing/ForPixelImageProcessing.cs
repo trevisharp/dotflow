@@ -139,7 +139,7 @@ namespace Sharp.Image.Processing
             return bpp;
         }
     
-        public static ByteGrayscaleProcessingPicture ForPixel(this Picture picture, Func<byte, byte, byte, byte> operation)
+        public static ByteGrayscaleProcessingPicture ForPixel(this Picture picture, Func<byte, byte, byte, int> operation)
         {
             var pp = ByteGrayscaleProcessingPicture.FromPicture(picture);
 
@@ -148,9 +148,38 @@ namespace Sharp.Image.Processing
                 Parallel.For(0, pp.height, j =>
                 {
                     byte* pixel = pp.p + j * pp.stride;
-                    int width = pp.width;
-                    for (int i = 0; i < width; i++, pixel += 3)
-                        pp.data[i] = operation(pixel[2], pixel[1], pixel[0]);
+                    int end = j * pp.stride + pp.width;
+                    for (int i = j * pp.stride; i < end; i++, pixel += 3)
+                        pp.data[i] = (byte)operation(pixel[2], pixel[1], pixel[0]);
+                });
+            }
+
+            return pp;
+        }
+
+        public static ByteGrayscaleProcessingPicture ForPixel(this ByteGrayscaleProcessingPicture pp, Func<byte, int> operation)
+        {
+            Parallel.For(0, pp.height, j =>
+            {
+                int end = pp.width + j * pp.stride;
+                for (int i = j * pp.stride; i < end; i++)
+                    pp.data[i] = (byte)operation(pp.data[i]);
+            });
+            return pp;
+        }
+
+        public static ByteGrayscaleProcessingPicture ForPixel(this Picture picture, Func<byte, int> operation)
+        {
+            var pp = ByteGrayscaleProcessingPicture.FromPicture(picture);
+
+            unsafe
+            {
+                Parallel.For(0, pp.height, j =>
+                {
+                    byte* pixel = pp.p + j * pp.stride;
+                    int end = pp.width + j * pp.stride;
+                    for (int i = j * pp.stride; i < end; i++, pixel += 3)
+                        pp.data[i] = (byte)operation((byte)((299 * pixel[2] + 587 * pixel[1] + 114 * pixel[0]) / 1000));
                 });
             }
 
@@ -166,8 +195,8 @@ namespace Sharp.Image.Processing
                 Parallel.For(0, pp.height, j =>
                 {
                     byte* pixel = pp.p + j * pp.stride;
-                    int width = pp.width;
-                    for (int i = 0; i < width; i++, pixel += 3)
+                    int end = pp.width + j * pp.stride;
+                    for (int i = j * pp.stride; i < end; i++, pixel += 3)
                         pp.data[i] = (byte)((299 * pixel[2] + 587 * pixel[1] + 114 * pixel[0]) / 1000);
                 });
             }

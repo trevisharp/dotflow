@@ -2,6 +2,7 @@ using System;
 using System.Buffers;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Threading.Tasks;
 
 namespace Sharp.Image.Processing
 {
@@ -17,7 +18,6 @@ namespace Sharp.Image.Processing
         internal Picture picture = null;
         internal byte[] data;
         internal bool closed = false;
-
         internal static ByteGrayscaleProcessingPicture FromPicture(Picture picture)
         {
             if (picture == null)
@@ -35,6 +35,27 @@ namespace Sharp.Image.Processing
             pp.data = ArrayPool<byte>.Shared.Rent(pp.stride * pp.height);
 
             return pp;
+        }
+
+        public Picture Close()
+        {
+            if (closed)
+                return null;
+            closed = true;
+            var pic = this.picture;
+            unsafe
+            {
+                Parallel.For(0, this.height, j =>
+                {
+                    byte* pixel = this.p + j * this.stride;
+                    int end = j * this.stride + this.width;
+                    for (int i = j * this.stride; i < end; i++, pixel += 3)
+                        pixel[2] = pixel[1] = pixel[0] = this.data[i];
+                });
+            }
+            this.bmp.UnlockBits(this.bmpdata);
+            Dispose();
+            return pic;
         }
 
         public void Dispose()
