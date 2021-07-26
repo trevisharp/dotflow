@@ -1,4 +1,4 @@
-namespace Sharp.Image.Processing
+namespace Flow.Image.Processing
 {
     public enum ProcessingFormat
     {

@@ -9,8 +9,8 @@ A seguir as features demonstradas sobre essa imagem de exemplo:
 ### Processamento Pixel-a-Pixel
 
 ```
-using Sharp.Image;
-using Sharp.Image.Processing;
+using Flow.Image;
+using Flow.Image.Processing;
 
 Picture pic = Picture
     .New("paingaming.jpg")
@@ -21,8 +21,8 @@ pic.Save("negativepng.jpg");
 ![negativepng.jpg](imgs/negativepng.jpg)
 
 ```
-using Sharp.Image;
-using Sharp.Image.Processing;
+using Flow.Image;
+using Flow.Image.Processing;
 
 Picture pic = Picture
     .New("paingaming.jpg")
@@ -33,8 +33,8 @@ pic.Save("gstreshold.jpg");
 ![gstreshold.jpg](imgs/gstreshold.jpg)
 
 ```
-using Sharp.Image;
-using Sharp.Image.Processing;
+using Flow.Image;
+using Flow.Image.Processing;
 
 Picture pic = Picture
     .New("paingaming.jpg")

@@ -1,7 +1,7 @@
 using System;
 using System.Drawing;
 
-namespace Sharp.Image
+namespace Flow.Image
 {
     using Util;
     using Processing;

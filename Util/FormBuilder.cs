@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Sharp.Util
+namespace Flow.Util
 {
     using Image;
     public class FormBuilder

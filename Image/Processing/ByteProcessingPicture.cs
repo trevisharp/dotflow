@@ -3,7 +3,7 @@ using System.Buffers;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace Sharp.Image.Processing
+namespace Flow.Image.Processing
 {
     public unsafe class ByteProcessingPicture : IProcessingPicture, IDisposable
     {

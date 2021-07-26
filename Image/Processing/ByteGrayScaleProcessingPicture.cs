@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Threading.Tasks;
 
-namespace Sharp.Image.Processing
+namespace Flow.Image.Processing
 {
     public unsafe class ByteGrayscaleProcessingPicture : IProcessingPicture, IDisposable
     {

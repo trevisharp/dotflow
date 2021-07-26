@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Sharp.Image.Processing
+namespace Flow.Image.Processing
 {
     public static class ForPixelImageProcessing
     {
