@@ -1,4 +1,6 @@
-# sharprocessing
+# dotflow
+
+![logo.png](imgs/logo.png)
 Uma biblioteca de processamento digital de imagens para C# em construção.
 
 ## Features
