@@ -1,11 +1,12 @@
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace Flow.Image
 {
     using Util;
     using Processing;
-    public class Picture : IDisposable
+    public class Picture : IPicture, IDisposable
     {
         internal Rectangle rect;
         internal Bitmap bmp = null;
@@ -46,13 +47,13 @@ namespace Flow.Image
                 var bmp = new Bitmap(rect.Width, rect.Height);
                 var g = Graphics.FromImage(bmp);
                 g.DrawImage(this.bmp, new Rectangle(0, 0, rect.Width, rect.Height), this.rect, GraphicsUnit.Pixel);
-                FormBuilder.Builder
+                ImageFormBuilder.Builder
                     .SetPicture(bmp)
                     .Show();
             }
             else
             {
-                FormBuilder.Builder
+                ImageFormBuilder.Builder
                     .SetPicture(this)
                     .Show();
             }
@@ -63,6 +64,14 @@ namespace Flow.Image
             if (mainpic is null)
                 bmp.Dispose();
             else mainpic.Dispose();
+        }
+
+        public Picture Copy()
+        {
+            var newbmp = bmp.Clone(rect, PixelFormat.Format24bppRgb) as Bitmap;
+            if (newbmp is null)
+                return null;
+            return new Picture(newbmp);
         }
 
         public static Picture New(string path)
@@ -81,6 +90,8 @@ namespace Flow.Image
         public static implicit operator Picture(FloatProcessingPicture pp)  
             => pp.Close();
         public static implicit operator Picture(ByteGrayscaleProcessingPicture pp)
-            => pp.Close();   
+            => pp.Close();
+        public static implicit operator Picture(FloatGrayScaleProcessingPicture pp)
+            => pp.Close();
     }
 }

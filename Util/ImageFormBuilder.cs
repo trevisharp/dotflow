@@ -1,17 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace Flow.Util
 {
+    using System.Drawing;
     using Image;
-    public class FormBuilder
+    public class ImageFormBuilder
     {
-        private FormBuilder() { }
-        public static FormBuilder Builder => new FormBuilder();
-        static FormBuilder()
+        internal ImageFormBuilder() { }
+        public static ImageFormBuilder Builder => new ImageFormBuilder();
+        static ImageFormBuilder()
         {
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
@@ -19,24 +18,30 @@ namespace Flow.Util
         }
 
         private Picture picture = null;
-        public FormBuilder SetPicture(Picture value)
+        public ImageFormBuilder SetPicture(Picture value)
         {
             this.picture = value;
             return this;
         }
 
         private PictureBoxSizeMode sizemode = PictureBoxSizeMode.Zoom;
-        public FormBuilder SetSizeMode(PictureBoxSizeMode value)
+        public ImageFormBuilder SetSizeMode(PictureBoxSizeMode value)
         {
             this.sizemode = value;
             return this;
         }
 
         private Keys exitkey = Keys.Escape;
-        public FormBuilder SetExitKey(Keys value)
+        public ImageFormBuilder SetExitKey(Keys value)
         {
             this.exitkey = value;
             return this;
+        }
+
+        private List<Action<Keys>> onkeyevents = new List<Action<Keys>>();
+        public void OnKey(Action<Keys> key)
+        {
+            onkeyevents.Add(key);
         }
 
         public void Show()
@@ -51,17 +56,31 @@ namespace Flow.Util
             pb.Dock = DockStyle.Fill;
             pb.SizeMode = this.sizemode;
             form.Controls.Add(pb);
+
+            Timer timer = new Timer();
+            timer.Interval = 25;
             
             form.KeyDown += (o, e) =>
             {
+                foreach (var ev in onkeyevents)
+                    ev(e.KeyCode);
                 if (e.KeyCode == this.exitkey)
                     form.Close();
             };
 
             form.Load += delegate
             {
+                timer.Start();
+            };
+
+            timer.Tick += delegate
+            {
                 if (picture != null)
-                    pb.Image = picture;
+                {
+                    Bitmap bmp = picture;
+                    if (bmp != null)
+                        pb.Image = bmp;
+                }
             };
 
             Application.Run(form);

@@ -186,6 +186,53 @@ namespace Flow.Image.Processing
             return pp;
         }
 
+        public static FloatGrayScaleProcessingPicture ForPixel(this Picture picture, Func<byte, byte, byte, float> operation)
+        {
+            var pp = FloatGrayScaleProcessingPicture.FromPicture(picture);
+
+            unsafe
+            {
+                Parallel.For(0, pp.height, j =>
+                {
+                    int start = j * pp.stride;
+                    byte* pixel = pp.p + start;
+                    for (int i = start, end = start + pp.width; i < end; i++, pixel += 3)
+                        pp.data[i] = operation(pixel[2], pixel[1], pixel[0]);
+                });
+            }
+
+            return pp;
+        }
+
+        public static FloatGrayScaleProcessingPicture ForPixel(this FloatGrayScaleProcessingPicture pp, Func<float, float> operation)
+        {
+            Parallel.For(0, pp.height, j =>
+            {
+                int start = j * pp.stride;
+                for (int i = start, end = start + pp.width; i < end; i++)
+                    pp.data[i] = operation(pp.data[i]);
+            });
+            return pp;
+        }
+
+        public static FloatGrayScaleProcessingPicture ForPixel(this Picture picture, Func<byte, float> operation)
+        {
+            var pp = FloatGrayScaleProcessingPicture.FromPicture(picture);
+
+            unsafe
+            {
+                Parallel.For(0, pp.height, j =>
+                {
+                    int start = j * pp.stride;
+                    byte* pixel = pp.p + start;
+                    for (int i = start, end = start + pp.width; i < end; i++, pixel += 3)
+                        pp.data[i] = operation((byte)((299 * pixel[2] + 587 * pixel[1] + 114 * pixel[0]) / 1000));
+                });
+            }
+
+            return pp;
+        }
+        
         public static ByteGrayscaleProcessingPicture ToGrayscale(this Picture picture)
         {
             var pp = ByteGrayscaleProcessingPicture.FromPicture(picture);
