@@ -2,17 +2,18 @@ using System;
 
 namespace Flow
 {
-    public class IterableFlow<T> : Flow<T>
+    public class IterableFlow<T>
     {
-        public IterableFlow() : base(default(T)) { }
+        public object State { get; set; } = null;
+        public IterableFlow() { }
 
         private OperationNode operation = null;
 
-        public void AddOperation(Func<T, T> op)
+        public void AddOperation(Func<object, object> op)
         {
             if (operation == null)
             {
-                operation = new OperationNode<T, T>()
+                operation = new OperationNode()
                 {
                     Operation = op
                 };
@@ -22,7 +23,7 @@ namespace Flow
                 var crr = operation;
                 while (crr.InnerOperation != null)
                     crr = crr.InnerOperation;
-                crr.InnerOperation = new OperationNode<T, T>()
+                crr.InnerOperation = new OperationNode()
                 {
                     Operation = op
                 };
@@ -33,7 +34,7 @@ namespace Flow
         {
             if (operation == null)
                 return;
-            this.State = (T)operation.Operate(this.State);
+            this.State = operation.Operate(this.State);
         }
 
         public void SetState(T state)
@@ -43,17 +44,22 @@ namespace Flow
         }
     }
 
-    public class IterableFlow<T, R> : Flow<T, R>
+    public class IterableFlow<T, R>
     {
-        public IterableFlow(R flowreturn) : base(default(T), flowreturn) { }
+        public object State { get; set; } = null;
+        public R Return { get; set; }
+        public IterableFlow(R flowreturn)
+        {
+            this.Return = flowreturn;
+        }
         
         private OperationNode operation = null;
         
-        public void AddOperation<P, U>(Func<P, U> op)
+        public void AddOperation(Func<object, object> op)
         {
             if (operation == null)
             {
-                operation = new OperationNode<P, U>()
+                operation = new OperationNode()
                 {
                     Operation = op
                 };
@@ -63,7 +69,7 @@ namespace Flow
                 var crr = operation;
                 while (crr.InnerOperation != null)
                     crr = crr.InnerOperation;
-                crr.InnerOperation = new OperationNode<P, U>()
+                crr.InnerOperation = new OperationNode()
                 {
                     Operation = op
                 };
@@ -74,23 +80,13 @@ namespace Flow
         {
             if (operation == null)
                 return;
-            this.State = (T)operation.Operate(this.State);
+            this.State = operation.Operate(this.State);
         }
 
         public void SetState(T state)
         {
             this.State = state;
             Iterate();
-        }
-
-        public new R Zip(Action<T, R> func)
-        {
-            AddOperation<T, T>(s => 
-            {
-                func(s, this.Return);
-                return s;
-            });
-            return this.Return;
         }
     }
 }

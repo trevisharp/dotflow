@@ -22,7 +22,7 @@ namespace Flow.Util
                 count--;
                 onframe -= value;
                 if (count <= 0)
-                    device.Stop();
+                    device.SignalToStop();
             }
         }
         public static event Action<Picture> onframe;
@@ -42,10 +42,14 @@ namespace Flow.Util
     
         public static void Stop()
         {
-            count = 0;
-            onframe = null;
-            device.Stop();
-            device = null;
+            try
+            {
+                count = 0;
+                onframe = null;
+                device.SignalToStop();
+                device = null;
+            }
+            catch { }
         }
     }
 }
