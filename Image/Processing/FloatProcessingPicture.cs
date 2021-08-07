@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Flow.Image.Processing
 {
-    public unsafe class FloatProcessingPicture : IProcessingPicture, IDisposable
+    public unsafe class FloatProcessingPicture : Picture, IDisposable
     {
         internal FloatProcessingPicture() { }
         internal Bitmap bmp = null;
@@ -15,11 +15,11 @@ namespace Flow.Image.Processing
         internal int height = -1;
         internal int stride = -1;
         internal BitmapData bmpdata = null;
-        internal Picture picture = null;
+        internal BitmapPicture picture = null;
         internal float[] data;
         internal bool closed = false;
         
-        internal static FloatProcessingPicture FromPicture(Picture picture)
+        internal static FloatProcessingPicture FromPicture(BitmapPicture picture)
         {
             if (picture == null)
                 return null;
@@ -38,7 +38,7 @@ namespace Flow.Image.Processing
             return pp;
         }
         
-        public Picture Close()
+        public BitmapPicture Close()
         {
             if (closed)
                 return null;
@@ -91,11 +91,6 @@ namespace Flow.Image.Processing
             this.bmpdata = null;
             this.stride = -1;
             this.p = null;
-        }
-    
-        public IntegralImage BuildIntegralImage()
-        {
-            throw new NotImplementedException();
         }
     }
 }

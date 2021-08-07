@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Flow.Image.Processing
 {
-    public unsafe class ByteGrayscaleProcessingPicture : IProcessingPicture, IDisposable
+    public unsafe class ByteGrayscaleProcessingPicture : Picture, IDisposable
     {
         internal ByteGrayscaleProcessingPicture() { }
         internal Bitmap bmp = null;
@@ -15,10 +15,10 @@ namespace Flow.Image.Processing
         internal int height = -1;
         internal int stride = -1;
         internal BitmapData bmpdata = null;
-        internal Picture picture = null;
+        internal BitmapPicture picture = null;
         internal byte[] data;
         internal bool closed = false;
-        internal static ByteGrayscaleProcessingPicture FromPicture(Picture picture)
+        internal static ByteGrayscaleProcessingPicture FromPicture(BitmapPicture picture)
         {
             if (picture == null)
                 return null;
@@ -37,7 +37,7 @@ namespace Flow.Image.Processing
             return pp;
         }
 
-        public Picture Close()
+        public BitmapPicture Close()
         {
             if (closed)
                 return null;

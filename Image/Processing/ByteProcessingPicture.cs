@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 
 namespace Flow.Image.Processing
 {
-    public unsafe class ByteProcessingPicture : IProcessingPicture, IDisposable
+    public unsafe class ByteProcessingPicture : Picture, IDisposable
     {
         internal ByteProcessingPicture() { }
         internal Bitmap bmp = null;
@@ -14,10 +14,10 @@ namespace Flow.Image.Processing
         internal int height = -1;
         internal int stride = -1;
         internal BitmapData bmpdata = null;
-        internal Picture picture = null;
+        internal BitmapPicture picture = null;
         internal bool closed = false;
 
-        internal static ByteProcessingPicture FromPicture(Picture picture)
+        internal static ByteProcessingPicture FromPicture(BitmapPicture picture)
         {
             if (picture == null)
                 return null;
@@ -35,7 +35,7 @@ namespace Flow.Image.Processing
             return pp;
         }
         
-        public Picture Close()
+        public BitmapPicture Close()
         {
             if (closed)
                 return null;

@@ -17,8 +17,8 @@ namespace Flow.Util
             Application.SetCompatibleTextRenderingDefault(false);
         }
 
-        private Picture picture = null;
-        public ImageFormBuilder SetPicture(Picture value)
+        private BitmapPicture picture = null;
+        public ImageFormBuilder SetPicture(BitmapPicture value)
         {
             this.picture = value;
             return this;

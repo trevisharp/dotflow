@@ -4,6 +4,7 @@ using System.Windows.Forms;
 namespace Flow.Util
 {
     using Image;
+    using Image.Processing;
     public static class App
     {
         public static Flow<ImageFormBuilder> Image
@@ -37,7 +38,7 @@ namespace Flow.Util
             return flow;
         }
 
-        public static Flow<ImageFormBuilder> SetPicture(this Flow<ImageFormBuilder> flow, Picture picture)
+        public static Flow<ImageFormBuilder> SetPicture(this Flow<ImageFormBuilder> flow, BitmapPicture picture)
         {
             flow.State.SetPicture(picture);
             return flow;
@@ -70,6 +71,15 @@ namespace Flow.Util
         public static Flow<T, Flow<ImageFormBuilder>> Show<T>(this Flow<T, Flow<ImageFormBuilder>> flow)
         {
             flow.Return.Show();
+            return flow;
+        }
+    
+        public static IterableFlow<T, Flow<ImageFormBuilder>> OnKey<T>(this IterableFlow<T, Flow<ImageFormBuilder>> flow, Keys keys, Action<T> act)
+        {
+            flow.Return.OnKey(keys, () => 
+            {
+                var s = flow.State;
+            });
             return flow;
         }
     }

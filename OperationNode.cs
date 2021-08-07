@@ -16,4 +16,11 @@ namespace Flow
         }
         public OperationNode InnerOperation { get; set; }
     }
+
+    public class OperationNode<T, R>
+    {
+        public Func<T, R> Operation { get; set; }
+
+
+    }
 }

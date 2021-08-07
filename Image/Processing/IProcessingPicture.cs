@@ -1,8 +1,8 @@
 namespace Flow.Image.Processing
 {
-    public interface IProcessingPicture : IPicture
-    {
-        IntegralImage BuildIntegralImage();
-        Picture Close();
-    }
+    // public interface IProcessingPicture : Picture
+    // {
+    //     IntegralImage BuildIntegralImage();
+    //     BasicPicture Close();
+    // }
 }

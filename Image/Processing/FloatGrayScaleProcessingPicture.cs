@@ -6,7 +6,7 @@ using System.Drawing.Imaging;
 
 namespace Flow.Image.Processing
 {
-    public unsafe class FloatGrayScaleProcessingPicture : IProcessingPicture, IDisposable
+    public unsafe class FloatGrayScaleProcessingPicture : Picture, IDisposable
     {
         internal FloatGrayScaleProcessingPicture() { }
         internal Bitmap bmp = null;
@@ -15,11 +15,11 @@ namespace Flow.Image.Processing
         internal int height = -1;
         internal int stride = -1;
         internal BitmapData bmpdata = null;
-        internal Picture picture = null;
+        internal BitmapPicture picture = null;
         internal float[] data;
         internal bool closed = false;
 
-        public Picture Close()
+        public BitmapPicture Close()
         {
             if (this.closed)
                 return null;
@@ -54,12 +54,7 @@ namespace Flow.Image.Processing
             this.data = null;
         }
         
-        public IntegralImage BuildIntegralImage()
-        {
-            throw new NotImplementedException();
-        }
-
-        public static FloatGrayScaleProcessingPicture FromPicture(Picture picture)
+        public static FloatGrayScaleProcessingPicture FromPicture(BitmapPicture picture)
         {
             if (picture == null)
                 return null;

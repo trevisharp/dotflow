@@ -1,97 +1,48 @@
-using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 
 namespace Flow.Image
 {
-    using Util;
     using Processing;
-    public class Picture : IPicture, IDisposable
+    public abstract class Picture
     {
-        internal Rectangle rect;
-        internal Bitmap bmp = null;
-        internal Picture mainpic = null;
-        public Picture(int width, int height)
-        {
-            this.bmp = new Bitmap(width, height);
-            this.rect = new Rectangle(0, 0, width, height);
-        }
-
-        public Picture(string path)
-        {
-            this.bmp = Bitmap.FromFile(path) as Bitmap;
-            this.rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-        }
-
-        public Picture(Bitmap bmp)
-        {
-            this.bmp = bmp;
-            this.rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-        }
-        
-        public Picture SubPicture(int x, int y, int width, int height)
-        {
-            var pic = new Picture(bmp);
-            pic.rect = new Rectangle(x, y, width, height);
-            return pic;
-        }
-
         public void Save(string path)
         {
-            bmp.Save(path);
+            if (this is BitmapPicture pic)
+                pic.bmp.Save(path);
+            else if (this is ByteGrayscaleProcessingPicture bgspp)
+                bgspp.Close().Save(path);
+            else if (this is ByteProcessingPicture bpp)
+                bpp.Close().Save(path);
+            else if (this is FloatProcessingPicture fpp)
+                fpp.Close().Save(path);
+            else if (this is FloatGrayScaleProcessingPicture fgspp)
+                fgspp.Close().Save(path);
         }
-        public void Show()
-        {
-            if (mainpic != null)
-            {
-                var bmp = new Bitmap(rect.Width, rect.Height);
-                var g = Graphics.FromImage(bmp);
-                g.DrawImage(this.bmp, new Rectangle(0, 0, rect.Width, rect.Height), this.rect, GraphicsUnit.Pixel);
-                ImageFormBuilder.Builder
-                    .SetPicture(bmp)
-                    .Show();
-            }
-            else
-            {
-                ImageFormBuilder.Builder
-                    .SetPicture(this)
-                    .Show();
-            }
-        }
-
-        public void Dispose()
-        {
-            if (mainpic is null)
-                bmp.Dispose();
-            else mainpic.Dispose();
-        }
-
+        public static Picture New(string path)
+            => new BitmapPicture(path);
+        public static Picture New(int width, int height)
+            => new BitmapPicture(width, height);
+        public static Picture New(Bitmap bmp)
+            => new BitmapPicture(bmp);
         public Picture Copy()
         {
-            var newbmp = bmp.Clone(rect, PixelFormat.Format24bppRgb) as Bitmap;
+            BitmapPicture bmppic = null;
+            if (this is BitmapPicture pic)
+                bmppic = pic;
+            else if (this is ByteGrayscaleProcessingPicture bgspp)
+                bmppic = bgspp.Close();
+            else if (this is ByteProcessingPicture bpp)
+                bmppic = bpp.Close();
+            else if (this is FloatProcessingPicture fpp)
+                bmppic = fpp.Close();
+            else if (this is FloatGrayScaleProcessingPicture fgspp)
+                bmppic = fgspp.Close();
+
+            var newbmp = bmppic.bmp.Clone(bmppic.rect, PixelFormat.Format24bppRgb) as Bitmap;
             if (newbmp is null)
                 return null;
-            return new Picture(newbmp);
+            return new BitmapPicture(newbmp);
         }
-
-        public static Picture New(string path)
-            => new Picture(path);
-        public static Picture New(int width, int height)
-            => new Picture(width, height);
-        public static Picture New(Bitmap bmp)
-            => new Picture(bmp);
-
-        public static implicit operator Bitmap(Picture pic)
-            => pic.bmp;
-        public static implicit operator Picture(Bitmap bmp)
-            => new Picture(bmp);
-        public static implicit operator Picture(ByteProcessingPicture pp)
-            => pp.Close();
-        public static implicit operator Picture(FloatProcessingPicture pp)  
-            => pp.Close();
-        public static implicit operator Picture(ByteGrayscaleProcessingPicture pp)
-            => pp.Close();
-        public static implicit operator Picture(FloatGrayScaleProcessingPicture pp)
-            => pp.Close();
     }
 }

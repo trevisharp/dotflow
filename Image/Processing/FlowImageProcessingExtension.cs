@@ -5,7 +5,7 @@ namespace Flow.Image.Processing
     using Util;
     public static class FlowImageProcessingExtension
     {
-        public static R Zip<R>(this IterableFlow<Picture, R> flow, Action<Picture, R> func)
+        public static R Zip<R>(this IterableFlow<BitmapPicture, R> flow, Action<BitmapPicture, R> func)
         {
             flow.AddOperation(s => 
             {
@@ -16,7 +16,7 @@ namespace Flow.Image.Processing
             return flow.Return;
         }
 
-        public static Flow<ImageFormBuilder> SetPicture(this IterableFlow<Picture, Flow<ImageFormBuilder>> flow)
+        public static Flow<ImageFormBuilder> SetPicture(this IterableFlow<BitmapPicture, Flow<ImageFormBuilder>> flow)
         {
             flow.AddOperation(s => 
             {
@@ -33,14 +33,29 @@ namespace Flow.Image.Processing
             return flow.Return;
         }
 
-        public static IterableFlow<Picture, R> ForPixel<R>(this IterableFlow<Picture, R> flow, Func<byte, byte, byte, (int, int, int)> operation)
+        public static IterableFlow<BitmapPicture, R> ForPixel<R>(this IterableFlow<BitmapPicture, R> flow, Func<byte, byte, byte, (int, int, int)> operation)
         {
             flow.AddOperation(p => 
             {
-                Picture pic = p as Picture;
-                return pic.ForPixel(operation);
+                if (p is BitmapPicture pic)
+                    return pic.ForPixel(operation);
+                else if (p is ByteProcessingPicture bpp)
+                    return bpp.ForPixel(operation);
+                return null;
             });
             return flow;
         }
     }
 }
+
+
+// if (p is Picture pic)
+//     return pic.ForPixel(operation);
+// else if (p is ByteProcessingPicture bpp)
+//     return bpp.ForPixel(operation);
+// else if (p is ByteGrayscaleProcessingPicture bgpp)
+//     return bgpp.ForPixel(operation);
+// else if (p is FloatProcessingPicture fpp)
+//     return fpp.ForPixel(operation);
+// else if (p is FloatGrayScaleProcessingPicture fgpp)
+//     return fgpp.ForPixel(operation);

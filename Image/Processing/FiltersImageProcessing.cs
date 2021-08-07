@@ -2,7 +2,7 @@ namespace Flow.Image.Processing
 {
     public static class FiltersImageProcessing
     {
-        public static ByteProcessingPicture BlurBox(this Picture picture, int size)
+        public static ByteProcessingPicture BlurBox(this BitmapPicture picture, int size)
         {
             ByteProcessingPicture pp = ByteProcessingPicture.FromPicture(picture);
             var integral = pp.BuildIntegralImage();
