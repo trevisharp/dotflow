@@ -6,6 +6,8 @@ namespace Flow.Image
     using Processing;
     public abstract class Picture
     {
+        private static EmptyPicture empty = new EmptyPicture();
+        public static Picture Empty => empty;
         public void Save(string path)
         {
             if (this is BitmapPicture pic)

@@ -51,5 +51,15 @@ namespace Flow.Util
             }
             catch { }
         }
+    
+        public static Flow<Picture> Get()
+        {
+            var flow = Flow.New(Picture.Empty);
+            OnFrame += pic =>
+            {
+                flow.Set(pic);
+            };
+            return flow;
+        }
     }
 }

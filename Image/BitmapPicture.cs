@@ -16,19 +16,16 @@ namespace Flow.Image
             this.bmp = new Bitmap(width, height);
             this.rect = new Rectangle(0, 0, width, height);
         }
-
         public BitmapPicture(string path)
         {
             this.bmp = Bitmap.FromFile(path) as Bitmap;
             this.rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
         }
-
         public BitmapPicture(Bitmap bmp)
         {
             this.bmp = bmp;
             this.rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
         }
-        
         public BitmapPicture SubPicture(int x, int y, int width, int height)
         {
             var pic = new BitmapPicture(bmp);
@@ -36,25 +33,6 @@ namespace Flow.Image
             return pic;
         }
         
-        public void Show()
-        {
-            if (mainpic != null)
-            {
-                var bmp = new Bitmap(rect.Width, rect.Height);
-                var g = Graphics.FromImage(bmp);
-                g.DrawImage(this.bmp, new Rectangle(0, 0, rect.Width, rect.Height), this.rect, GraphicsUnit.Pixel);
-                ImageFormBuilder.Builder
-                    .SetPicture(bmp)
-                    .Show();
-            }
-            else
-            {
-                ImageFormBuilder.Builder
-                    .SetPicture(this)
-                    .Show();
-            }
-        }
-
         public void Dispose()
         {
             if (mainpic is null)

@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Windows.Forms;
 using System.Collections.Generic;
 
@@ -9,7 +10,7 @@ namespace Flow.Util
     public class ImageFormBuilder
     {
         internal ImageFormBuilder() { }
-        public static ImageFormBuilder Builder => new ImageFormBuilder();
+        public static ImageFormBuilder New => new ImageFormBuilder();
         static ImageFormBuilder()
         {
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
@@ -44,8 +45,11 @@ namespace Flow.Util
             onkeyevents.Add(key);
         }
 
+        private bool isshowing = false;
         public void Show()
         {
+            if (isshowing)
+                return;
             var form = new Form();
 
             form.FormBorderStyle = FormBorderStyle.None;
@@ -57,7 +61,7 @@ namespace Flow.Util
             pb.SizeMode = this.sizemode;
             form.Controls.Add(pb);
 
-            Timer timer = new Timer();
+            System.Windows.Forms.Timer timer = new();
             timer.Interval = 25;
             
             form.KeyDown += (o, e) =>
@@ -82,8 +86,13 @@ namespace Flow.Util
                         pb.Image = bmp;
                 }
             };
-
-            Application.Run(form);
+            isshowing = true;
+            Thread thread = null;
+            thread = new Thread(() =>
+            {
+                Application.Run(form);
+            });
+            thread.Start();
         }
     }
 }
