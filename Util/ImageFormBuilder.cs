@@ -18,8 +18,8 @@ namespace Flow.Util
             Application.SetCompatibleTextRenderingDefault(false);
         }
 
-        private BitmapPicture picture = null;
-        public ImageFormBuilder SetPicture(BitmapPicture value)
+        private Picture picture = null;
+        public ImageFormBuilder SetPicture(Picture value)
         {
             this.picture = value;
             return this;
@@ -69,7 +69,11 @@ namespace Flow.Util
                 foreach (var ev in onkeyevents)
                     ev(e.KeyCode);
                 if (e.KeyCode == this.exitkey)
+                {
                     form.Close();
+                    Application.Exit();
+                    Camera.Stop();
+                }
             };
 
             form.Load += delegate
@@ -81,7 +85,7 @@ namespace Flow.Util
             {
                 if (picture != null)
                 {
-                    Bitmap bmp = picture;
+                    Bitmap bmp = picture.ToBitmap();
                     if (bmp != null)
                         pb.Image = bmp;
                 }

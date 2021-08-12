@@ -39,7 +39,8 @@ namespace Flow.Image
                 bmp.Dispose();
             else mainpic.Dispose();
         }
-
+        public override Bitmap ToBitmap()
+            => this.bmp;
         public static implicit operator Bitmap(BitmapPicture pic)
             => pic.bmp;
         public static implicit operator BitmapPicture(Bitmap bmp)

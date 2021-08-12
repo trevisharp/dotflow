@@ -21,6 +21,7 @@ namespace Flow.Image
             else if (this is FloatGrayScaleProcessingPicture fgspp)
                 fgspp.Close().Save(path);
         }
+        public abstract Bitmap ToBitmap();
         public static Picture New(string path)
             => new BitmapPicture(path);
         public static Picture New(int width, int height)

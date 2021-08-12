@@ -38,6 +38,8 @@ namespace Flow.Image.Processing
             return pp;
         }
         
+        public override Bitmap ToBitmap()
+            => Close().ToBitmap();
         public BitmapPicture Close()
         {
             if (closed)

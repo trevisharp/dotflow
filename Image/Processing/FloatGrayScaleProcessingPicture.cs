@@ -19,6 +19,8 @@ namespace Flow.Image.Processing
         internal float[] data;
         internal bool closed = false;
 
+        public override Bitmap ToBitmap()
+            => Close().ToBitmap();
         public BitmapPicture Close()
         {
             if (this.closed)

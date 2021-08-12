@@ -43,49 +43,56 @@ namespace Flow
                 return builder;
             });
 
-        public static Flow<ImageFormBuilder> SetPicture(this Flow<ImageFormBuilder> flow, BitmapPicture picture)
+        public static Flow<ImageFormBuilder> SetPicture(this Flow<ImageFormBuilder> flow, Picture picture)
             => Flow.From(flow, builder =>
             {
                 builder.SetPicture(picture);
                 return builder;
             });
 
-        public static Flow<T, T, Flow<ImageFormBuilder>> OnKey<T, I>(this Flow<T, I, Flow<ImageFormBuilder>> flow, Action act)
-            => Flow.From(flow, x =>
-            {
-                flow.Parent.State.OnKey(k => act());
-                return x;
-            });
+        public static Flow<T, T, Flow<ImageFormBuilder>> OnKey<T, I>(this Flow<T, I, Flow<ImageFormBuilder>> flow, Action<T> act)
+        {
+            var result = Flow.From(flow, x => x);
+            flow.Parent.State.OnKey(k => act(result.State));
+            return result;
+        }
 
-        public static Flow<T, T, Flow<ImageFormBuilder>> OnKey<T, I>(this Flow<T, I, Flow<ImageFormBuilder>> flow, Action<Keys> act)
-            => Flow.From(flow, x =>
-            {
-                flow.Parent.State.OnKey(act);
-                return x;
-            });
+        public static Flow<T, T, Flow<ImageFormBuilder>> OnKey<T, I>(this Flow<T, I, Flow<ImageFormBuilder>> flow, Action<Keys, T> act)
+        {
+            var result = Flow.From(flow, x => x);
+            flow.Parent.State.OnKey(k => act(k, result.State));
+            return result;
+        }
 
-        public static Flow<T, T, Flow<ImageFormBuilder>> OnKey<T, I>(this Flow<T, I, Flow<ImageFormBuilder>> flow, Keys keys, Action act)
-            => Flow.From(flow, x =>
+        public static Flow<T, T, Flow<ImageFormBuilder>> OnKey<T, I>(this Flow<T, I, Flow<ImageFormBuilder>> flow, Keys keys, Action<T> act)
+        {
+            var result = Flow.From(flow, x => x);
+            flow.Parent.State.OnKey(k => 
             {
-                flow.Parent.State.OnKey(k => 
-                {
-                    if (k == keys)
-                        act();
-                });
-                return x;
+                if (keys == k)
+                    act(result.State);
             });
+            return result;
+        }
         
-        public static Flow<T, T, Flow<ImageFormBuilder>> SetPicture<T, I>(this Flow<T, I, Flow<ImageFormBuilder>> flow, BitmapPicture picture)
+        public static Flow<T, T, Flow<ImageFormBuilder>> SetPicture<T, I>(this Flow<T, I, Flow<ImageFormBuilder>> flow, Picture picture)
             => Flow.From(flow, x =>
             {
                 flow.Parent.State.SetPicture(picture);
                 return x;
             });
         
-        public static Flow<T, T, Flow<ImageFormBuilder>> SetPicture<T, I>(this Flow<T, I, Flow<ImageFormBuilder>> flow, Func<T, BitmapPicture> getpic)
+        public static Flow<T, T, Flow<ImageFormBuilder>> SetPicture<T, I>(this Flow<T, I, Flow<ImageFormBuilder>> flow, Func<T, Picture> getpic)
             => Flow.From(flow, x =>
             {
                 flow.Parent.State.SetPicture(getpic(x));
+                return x;
+            });
+        
+        public static Flow<Picture, Picture, Flow<ImageFormBuilder>> SetPicture<I>(this Flow<Picture, I, Flow<ImageFormBuilder>> flow)
+            => Flow.From(flow, x =>
+            {
+                flow.Parent.State.SetPicture(x);
                 return x;
             });
         
