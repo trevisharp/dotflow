@@ -71,10 +71,5 @@ namespace Flow.Image.Processing
             this.bmpdata = null;
             this.picture = null;
         }
-    
-        public IntegralImage BuildIntegralImage()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

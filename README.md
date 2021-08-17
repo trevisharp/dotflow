@@ -49,11 +49,13 @@ pic.Save("multiprocesspng.jpg");
 
 ## TODO
 
- - Tratar exceções adequadamente
+ - Tratar exceções adequadamente (50%)
  - Acrescentar documentação
  - Add README.md in english language
- - Finalizar todas as implementações de operação pixel-a-pixel
+ - Finalizar todas as implementações de operação pixel-a-pixel (50%)
  - Implementar Integral de imagens
  - Implementar método Copy para imagens
  - Implementar BlurBox
  - Implementar convolução de imagens
+ - Substituir usos do tipo Picture por BitmapPicture
+ - Corrigir README.md para as novas versões

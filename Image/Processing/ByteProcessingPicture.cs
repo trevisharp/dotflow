@@ -77,10 +77,5 @@ namespace Flow.Image.Processing
             this.stride = -1;
             this.p = null;
         }
-
-        public IntegralImage BuildIntegralImage()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
