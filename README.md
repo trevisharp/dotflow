@@ -57,5 +57,4 @@ pic.Save("multiprocesspng.jpg");
  - Implementar método Copy para imagens
  - Implementar BlurBox
  - Implementar convolução de imagens
- - Substituir usos do tipo Picture por BitmapPicture
  - Corrigir README.md para as novas versões

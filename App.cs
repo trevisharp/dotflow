@@ -5,7 +5,6 @@ namespace Flow
 {
     using Util;
     using Image;
-    using Image.Processing;
     public static class App
     {
         public static Flow<ImageFormBuilder> Image

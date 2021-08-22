@@ -1,51 +1,57 @@
+using System;
 using System.Drawing;
-using System.Drawing.Imaging;
 
 namespace Flow.Image
 {
     using Processing;
-    public abstract class Picture
+    public class Picture : BasePicture, IDisposable
     {
-        private static EmptyPicture empty = new EmptyPicture();
-        public static Picture Empty => empty;
-        public void Save(string path)
+        internal Rectangle rect;
+        internal Bitmap bmp = null;
+        internal Picture mainpic = null;
+        public Picture(int width, int height)
         {
-            if (this is BitmapPicture pic)
-                pic.bmp.Save(path);
-            else if (this is ByteGrayscaleProcessingPicture bgspp)
-                bgspp.Close().Save(path);
-            else if (this is ByteProcessingPicture bpp)
-                bpp.Close().Save(path);
-            else if (this is FloatProcessingPicture fpp)
-                fpp.Close().Save(path);
-            else if (this is FloatGrayScaleProcessingPicture fgspp)
-                fgspp.Close().Save(path);
+            if (width == 0 || height == 0)
+                return;
+            this.bmp = new Bitmap(width, height);
+            this.rect = new Rectangle(0, 0, width, height);
         }
-        public abstract Bitmap ToBitmap();
-        public static Picture New(string path)
-            => new BitmapPicture(path);
-        public static Picture New(int width, int height)
-            => new BitmapPicture(width, height);
-        public static Picture New(Bitmap bmp)
-            => new BitmapPicture(bmp);
-        public Picture Copy()
+        public Picture(string path)
         {
-            BitmapPicture bmppic = null;
-            if (this is BitmapPicture pic)
-                bmppic = pic;
-            else if (this is ByteGrayscaleProcessingPicture bgspp)
-                bmppic = bgspp.Close();
-            else if (this is ByteProcessingPicture bpp)
-                bmppic = bpp.Close();
-            else if (this is FloatProcessingPicture fpp)
-                bmppic = fpp.Close();
-            else if (this is FloatGrayScaleProcessingPicture fgspp)
-                bmppic = fgspp.Close();
-
-            var newbmp = bmppic.bmp.Clone(bmppic.rect, PixelFormat.Format24bppRgb) as Bitmap;
-            if (newbmp is null)
-                return null;
-            return new BitmapPicture(newbmp);
+            this.bmp = Bitmap.FromFile(path) as Bitmap;
+            this.rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
         }
+        public Picture(Bitmap bmp)
+        {
+            this.bmp = bmp;
+            this.rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
+        }
+        public Picture SubPicture(int x, int y, int width, int height)
+        {
+            var pic = new Picture(bmp);
+            pic.rect = new Rectangle(x, y, width, height);
+            return pic;
+        }
+        
+        public void Dispose()
+        {
+            if (mainpic is null)
+                bmp.Dispose();
+            else mainpic.Dispose();
+        }
+        public override Bitmap ToBitmap()
+            => this.bmp;
+        public static implicit operator Bitmap(Picture pic)
+            => pic.bmp;
+        public static implicit operator Picture(Bitmap bmp)
+            => new Picture(bmp);
+        public static implicit operator Picture(ByteProcessingPicture pp)
+            => pp.Close();
+        public static implicit operator Picture(FloatProcessingPicture pp)  
+            => pp.Close();
+        public static implicit operator Picture(ByteGrayscaleProcessingPicture pp)
+            => pp.Close();
+        public static implicit operator Picture(FloatGrayScaleProcessingPicture pp)
+            => pp.Close();
     }
 }

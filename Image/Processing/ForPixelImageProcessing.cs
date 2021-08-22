@@ -6,7 +6,7 @@ namespace Flow.Image.Processing
     public static class ForPixelImageProcessing
     {
         //ByteProcessingPicture
-        public static ByteProcessingPicture ForPixel(this BitmapPicture bmp, Func<byte, byte, byte, (int, int, int)> op)
+        public static ByteProcessingPicture ForPixel(this Picture bmp, Func<byte, byte, byte, (int, int, int)> op)
         {
             if (bmp == null || op == null)
                 throw new InvalidOperationException("Picture and Operation is needed.");
@@ -94,7 +94,7 @@ namespace Flow.Image.Processing
 
 
         //ByteGrayscaleProcessingPicture
-        public static ByteGrayscaleProcessingPicture ForPixel(this BitmapPicture bmp, Func<byte, byte, byte, int> op)
+        public static ByteGrayscaleProcessingPicture ForPixel(this Picture bmp, Func<byte, byte, byte, int> op)
         {
             if (bmp == null || op == null)
                 throw new InvalidOperationException("Picture and Operation is needed.");
@@ -149,7 +149,7 @@ namespace Flow.Image.Processing
             throw new NotImplementedException();
         }
 
-        public static ByteGrayscaleProcessingPicture ForPixel(this BitmapPicture bmp, Func<byte, int> op)
+        public static ByteGrayscaleProcessingPicture ForPixel(this Picture bmp, Func<byte, int> op)
         {
             if (bmp == null || op == null)
                 throw new InvalidOperationException("Picture and Operation is needed.");
@@ -170,7 +170,7 @@ namespace Flow.Image.Processing
 
         
         //FloatProcessingPicture
-        public static FloatProcessingPicture ForPixel(this BitmapPicture bmp, Func<byte, byte, byte, (float, float, float)> op)
+        public static FloatProcessingPicture ForPixel(this Picture bmp, Func<byte, byte, byte, (float, float, float)> op)
         {
             if (bmp == null || op == null)
                 throw new InvalidOperationException("Picture and Operation is needed.");
@@ -255,7 +255,7 @@ namespace Flow.Image.Processing
 
         
         //FloatGrayScaleProcessingPicture
-        public static FloatGrayScaleProcessingPicture ForPixel(this BitmapPicture bmp, Func<byte, byte, byte, float> op)
+        public static FloatGrayScaleProcessingPicture ForPixel(this Picture bmp, Func<byte, byte, byte, float> op)
         {
             if (bmp == null || op == null)
                 throw new InvalidOperationException("Picture and Operation is needed.");
@@ -310,7 +310,7 @@ namespace Flow.Image.Processing
             return fgspp;
         }
 
-        public static FloatGrayScaleProcessingPicture ForPixel(this BitmapPicture bmp, Func<float, float> op)
+        public static FloatGrayScaleProcessingPicture ForPixel(this Picture bmp, Func<float, float> op)
         {
             if (bmp == null || op == null)
                 throw new InvalidOperationException("Picture and Operation is needed.");

@@ -36,7 +36,7 @@ namespace Flow.Util
             {
                 Bitmap bmp = e.Frame;
                 if (onframe != null)
-                    onframe(Picture.New(new Bitmap(bmp)));
+                    onframe(BasePicture.New(new Bitmap(bmp)));
             };
         }
     
@@ -54,7 +54,7 @@ namespace Flow.Util
     
         public static Flow<Picture> Get()
         {
-            var flow = Flow.New(Picture.Empty);
+            var flow = Flow.New(BasePicture.Empty);
             OnFrame += pic =>
             {
                 flow.Set(pic);

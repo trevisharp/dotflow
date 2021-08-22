@@ -8,17 +8,11 @@ namespace Flow.Image.Processing
             => Flow.WithParent(
                 Flow.From(flow, p => p.Copy()), 
                 flow);
-        
-        public static Flow<BitmapPicture, Picture> OpenPixels(this Flow<Picture> flow)
-            => Flow.From(flow, p => p as BitmapPicture);
-        
-        public static Flow<BitmapPicture, Picture, P> OpenPixels<T, P>(this Flow<Picture, T, P> flow)
-            => Flow.From(flow, p => p as BitmapPicture);
 
-        public static Flow<ByteProcessingPicture, BitmapPicture> ForPixel(this Flow<BitmapPicture> flow, 
+        public static Flow<ByteProcessingPicture, Picture> ForPixel(this Flow<Picture> flow, 
             Func<byte, byte, byte, (int, int, int)> op) => Flow.From(flow, p => p.ForPixel(op));
         
-        public static Flow<ByteProcessingPicture, BitmapPicture, P> ForPixel<T, P>(this Flow<BitmapPicture, T, P> flow, 
+        public static Flow<ByteProcessingPicture, Picture, P> ForPixel<T, P>(this Flow<Picture, T, P> flow, 
             Func<byte, byte, byte, (int, int, int)> op) => Flow.From(flow, p => p.ForPixel(op));
     }
 }
