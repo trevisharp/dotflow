@@ -1,51 +1,16 @@
 # dotflow
 
 ![logo.png](imgs/logo.png)
-Uma biblioteca de processamento digital de imagens para C# em construção.
+Uma biblioteca de processamento digital de sinais para C# em construção.
 
-## Features
+## Feature
 
-A seguir as features demonstradas sobre essa imagem de exemplo:
-![paingaming.jpg](imgs/paingaming.jpg)
-
-### Processamento Pixel-a-Pixel
-
-```
-using Flow.Image;
-using Flow.Image.Processing;
-
-Picture pic = Picture
-    .New("paingaming.jpg")
-    .ForPixel((r, g, b) => (255 - r, 255 - g, 255 - b));
-
-pic.Save("negativepng.jpg");
-```
-![negativepng.jpg](imgs/negativepng.jpg)
-
-```
-using Flow.Image;
-using Flow.Image.Processing;
-
-Picture pic = Picture
-    .New("paingaming.jpg")
-    .ForPixel(p => p > 155 ? 255 : 0); //Grayscale automático
-
-pic.Save("gstreshold.jpg");
-```
-![gstreshold.jpg](imgs/gstreshold.jpg)
-
-```
-using Flow.Image;
-using Flow.Image.Processing;
-
-Picture pic = Picture
-    .New("paingaming.jpg")
-    .ForPixel((r, g, b) => (r * g / 255, g * b / 255, b * r / 255)) //Multiplos processamentos
-    .ForPixel((r, g, b) => (b, g, r));
-
-pic.Save("multiprocesspng.jpg");
-```
-![multiprocesspng.jpg](imgs/multiprocesspng.jpg)
+ - Abra e Salve imagens
+ - Processe a image pixel a pixel
+ - Veja a imagem processada
+ - Processe direto da Webcam
+ - Abra e Salve áudios em .wav
+ - Proesse amostra a amostra
 
 ## TODO
 
@@ -57,4 +22,6 @@ pic.Save("multiprocesspng.jpg");
  - Implementar método Copy para imagens
  - Implementar BlurBox
  - Implementar convolução de imagens
+ - Implementar mais codecs de áudio
+ - Implementar processamento de sinais genérico
  - Corrigir README.md para as novas versões

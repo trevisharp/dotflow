@@ -1,6 +1,5 @@
-using System.Media;
-using System.Linq;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Flow.Audio
@@ -56,14 +55,6 @@ namespace Flow.Audio
                 sound.Channels.Add(new float[size]);
             return sound;
         }
-        public static AlgebricSound New(double duration, Func<double, double> signal)
-        {
-            AlgebricSound algebric = new AlgebricSound();
-            algebric.Duration = duration;
-            algebric.Equation = signal;
-            return algebric;
-        }
-    
         public static Sound operator +(Sound a, Sound b)
         {
             for (int c = 0; c < a.Channels.Count; c++)
