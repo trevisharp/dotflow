@@ -16,7 +16,6 @@ namespace Flow.Image.Processing
         internal BitmapData bmpdata = null;
         internal Picture picture = null;
         internal bool closed = false;
-
         internal static ByteProcessingPicture FromPicture(Picture picture)
         {
             if (picture == null)
@@ -34,7 +33,6 @@ namespace Flow.Image.Processing
 
             return pp;
         }
-        
         public override Bitmap ToBitmap()
             => Close().ToBitmap();
         public Picture Close()
@@ -47,7 +45,6 @@ namespace Flow.Image.Processing
 
             return pic;
         }
-    
         internal FloatProcessingPicture ToFloatProcessing()
         {
             this.closed = true;
