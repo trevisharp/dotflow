@@ -8,25 +8,11 @@ namespace Flow.Audio
     public class Sound : BaseAudio
     {
         public override float this[float t, int channel = 0]
-        {
-            get => Channels[channel][(int)(t / 50000f)];
-            set => Channels[channel][(int)(t / 50000f)] = value;
-        }
-
+            => Channels[channel][(int)(t / 50000f)];     
         public string Path { get; set; } = "output.wav";
         public List<float[]> Channels { get; set; } = new List<float[]>();
-        public static Sound New(float duration, int channels = 1)
-        {
-            Sound sound = new Sound();
-            int size = (int)(duration * 50000);
-            while (channels-- > 0)
-                sound.Channels.Add(new float[size]);
-            return sound;
-        }
-
         public override void Save()
             => SaveAsWave(this.Path);
-
         public void SaveAsWave(string path)
         {
             if (Channels.Count == 0 || Channels.Count(c => c == null || c.Length == 0) > 0)
@@ -61,6 +47,89 @@ namespace Flow.Audio
                 }
             }       
             codec.Save(path, convertedata);
+        }
+        public static Sound New(double duration, int channels = 1)
+        {
+            Sound sound = new Sound();
+            int size = (int)(duration * 50000);
+            while (channels-- > 0)
+                sound.Channels.Add(new float[size]);
+            return sound;
+        }
+        public static AlgebricSound New(double duration, Func<double, double> signal)
+        {
+            AlgebricSound algebric = new AlgebricSound();
+            algebric.Duration = duration;
+            algebric.Equation = signal;
+            return algebric;
+        }
+    
+        public static Sound operator +(Sound a, Sound b)
+        {
+            for (int c = 0; c < a.Channels.Count; c++)
+            {
+                if (b.Channels.Count == c)
+                    break;
+                var datA = a.Channels[c];
+                var datB = b.Channels[c];
+                int size = datA.Length < datB.Length ? datA.Length : datB.Length;
+                for (int i = 0; i < size; i++)
+                {
+                    datA[i] += datB[i];
+                }
+            }
+            return a;
+        }
+
+        public static Sound operator -(Sound a, Sound b)
+        {
+            for (int c = 0; c < a.Channels.Count; c++)
+            {
+                if (b.Channels.Count == c)
+                    break;
+                var datA = a.Channels[c];
+                var datB = b.Channels[c];
+                int size = datA.Length < datB.Length ? datA.Length : datB.Length;
+                for (int i = 0; i < size; i++)
+                {
+                    datA[i] -= datB[i];
+                }
+            }
+            return a;
+        }
+
+        public static Sound operator *(Sound a, Sound b)
+        {
+            for (int c = 0; c < a.Channels.Count; c++)
+            {
+                if (b.Channels.Count == c)
+                    break;
+                var datA = a.Channels[c];
+                var datB = b.Channels[c];
+                int size = datA.Length < datB.Length ? datA.Length : datB.Length;
+                for (int i = 0; i < size; i++)
+                {
+                    datA[i] *= datB[i];
+                }
+            }
+            return a;
+        }
+
+        public static Sound operator /(Sound a, Sound b)
+        {
+            for (int c = 0; c < a.Channels.Count; c++)
+            {
+                if (b.Channels.Count == c)
+                    break;
+                var datA = a.Channels[c];
+                var datB = b.Channels[c];
+                int size = datA.Length < datB.Length ? datA.Length : datB.Length;
+                for (int i = 0; i < size; i++)
+                {
+                    datA[i] /= datB[i] == 0.0 ? float.Epsilon : datB[i];
+                }
+            }
+            return a;
         }
     }
 }
