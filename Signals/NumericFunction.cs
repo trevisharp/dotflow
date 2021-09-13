@@ -9,7 +9,7 @@ namespace Flow.Signals
             => this.func = _f;
         public override double this[double t] => func(t);
         public override Function Derive()
-            => new Func<double, double>(t => (func(t + 1e-8) - func(t)) / 1e-8);
+            => new Func<double, double>(t => (func(t + 1e-4) - func(t)) / 1e-4);
         public static NumericFunction operator +(NumericFunction f, NumericFunction g)
             => new NumericFunction(t => f.func(t) + g.func(t));
         public static NumericFunction operator -(NumericFunction f, NumericFunction g)
