@@ -1,3 +1,5 @@
+using System;
+
 namespace Flow.Signals
 {
     public static class Functions
@@ -22,5 +24,8 @@ namespace Flow.Signals
             af.Aggregation = new CosAggregation();
             return af;
         }
+    
+        public static Function f(Func<double, double> func)
+            => func;
     }
 }
